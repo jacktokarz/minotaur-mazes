@@ -27,6 +27,8 @@ const restartButton = document.querySelector("#restart-button");
 const TILE_SIZE = 64;
 const MINOTAUR_STEPS_PER_TURN = 2;
 
+const TILE_ANIMATION_MS = 500;
+
 const ASSET_PATHS = {
   floor: "/assets/floor.png",
   wall: "/assets/wall.png",
@@ -371,26 +373,51 @@ function drawFallbackCharacter(position, color, letter) {
 }
 
 function drawCharacter(image, position, color, letter) {
+  const tileSize = canvas.width / width;
+  const pixelX = position.x * tileSize;
+  const pixelY = position.y * tileSize;
+
   if (image) {
-    drawImageTile(image, position.x, position.y);
+    ctx.drawImage(
+      image,
+      pixelX,
+      pixelY,
+      tileSize,
+      tileSize
+    );
   } else {
-    drawFallbackCharacter(position, color, letter);
+    const centerX = pixelX + tileSize / 2;
+    const centerY = pixelY + tileSize / 2;
+    const radius = tileSize * 0.32;
+
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#fff";
+    ctx.font = `bold ${Math.floor(tileSize * 0.35)}px sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(letter, centerX, centerY);
   }
 }
 
-function drawBoard() {
+
+function drawBoard(
+  visualTheseus = theseus,
+  visualMinotaurs = minotaurs
+) {
   if (!tiles.length || !canvas.width || !canvas.height) {
     return;
   }
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // 1. Draw the base floor and walls.
+  // Draw the floor and walls.
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
-      const tile = tiles[y][x];
-
-      if (tile === "wall") {
+      if (tiles[y][x] === "wall") {
         drawImageTile(assets.wall, x, y);
       } else {
         drawImageTile(assets.floor, x, y);
@@ -398,21 +425,21 @@ function drawBoard() {
     }
   }
 
-  // 2. Draw all exits, layering the portal over the floor.
+  // Draw portals above the floor.
   for (const exit of exits) {
     drawImageTile(assets.portal, exit.x, exit.y);
   }
 
-  // 3. Draw Theseus.
+  // Draw Theseus at the current visual position.
   drawCharacter(
     assets.theseus,
-    theseus,
+    visualTheseus,
     "#218c44",
     "T"
   );
 
-  // 4. Draw every Minotaur.
-  for (const minotaur of minotaurs) {
+  // Draw each Minotaur at its current visual position.
+  for (const minotaur of visualMinotaurs) {
     drawCharacter(
       assets.minotaur,
       minotaur,
@@ -421,19 +448,51 @@ function drawBoard() {
     );
   }
 
-  // 5. Draw a subtle highlight around Theseus's current tile.
+  // Highlight Theseus's current visual tile.
   const tileSize = canvas.width / width;
 
   ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
   ctx.lineWidth = Math.max(1, tileSize * 0.025);
 
   ctx.strokeRect(
-    theseus.x * tileSize + 2,
-    theseus.y * tileSize + 2,
+    visualTheseus.x * tileSize + 2,
+    visualTheseus.y * tileSize + 2,
     tileSize - 4,
     tileSize - 4
   );
 }
+
+function animatePosition(from, to, renderFrame) {
+  return new Promise((resolve) => {
+    const startTime = performance.now();
+
+    function frame(now) {
+      const progress = Math.min(
+        (now - startTime) / TILE_ANIMATION_MS,
+        1
+      );
+
+      // Smooth acceleration and deceleration.
+      const eased = progress * progress * (3 - 2 * progress);
+
+      const position = {
+        x: from.x + (to.x - from.x) * eased,
+        y: from.y + (to.y - from.y) * eased,
+      };
+
+      renderFrame(position);
+
+      if (progress < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        resolve();
+      }
+    }
+
+    requestAnimationFrame(frame);
+  });
+}
+
 
 // ------------------------------------------------------------
 // Movement
@@ -455,45 +514,52 @@ function getDestination(position, direction) {
   };
 }
 
-function moveTheseus(direction) {
+
+async function moveTheseus(direction) {
   if (gameOver || isAnimatingTurn || !theseus) {
     return;
   }
 
   const destination = getDestination(theseus, direction);
 
-  // Theseus cannot walk through walls.
   if (isWall(destination)) {
     setStatus("A wall blocks the way.");
     return;
   }
 
+  isAnimatingTurn = true;
+
+  const startingPosition = copyPosition(theseus);
+
+  // Update the logical position while displaying the animation.
   theseus = destination;
   moveCount += 1;
 
-  // Reaching any exit wins immediately.
+  await animatePosition(
+    startingPosition,
+    destination,
+    (visualPosition) => {
+      drawBoard(visualPosition, minotaurs);
+    }
+  );
+
+  // Reaching any portal wins immediately.
   if (isExit(theseus)) {
     finishGame(true);
     return;
   }
 
-  // A Minotaur already occupying Theseus's destination is a capture.
+  // Capture is checked before the Minotaurs move.
   if (isMinotaurAt(theseus)) {
     finishGame(false);
     return;
   }
 
-  isAnimatingTurn = true;
+  setStatus("The Minotaurs pursue Theseus…");
 
-  drawBoard();
-
-  setStatus("The Minotaur pursues Theseus…");
-
-  // Allow the player to see Theseus's move before the pursuit begins.
-  window.setTimeout(() => {
-    runMinotaurTurn();
-  }, 120);
+  await runMinotaurTurn();
 }
+
 
 // ------------------------------------------------------------
 // Minotaur AI
@@ -537,33 +603,41 @@ function chooseMinotaurStep(minotaur) {
   return copyPosition(minotaur);
 }
 
-function runMinotaurTurn() {
+async function runMinotaurTurn() {
   if (gameOver) {
     isAnimatingTurn = false;
     return;
   }
 
-  // Each Minotaur acts in sequence, making up to two steps.
   for (let i = 0; i < minotaurs.length; i += 1) {
     for (
       let step = 0;
       step < MINOTAUR_STEPS_PER_TURN;
       step += 1
     ) {
-      const minotaur = minotaurs[i];
+      const startingPosition = copyPosition(minotaurs[i]);
+      const destination = chooseMinotaurStep(startingPosition);
 
-      const destination = chooseMinotaurStep(minotaur);
-
-      // A blocked Minotaur cannot make progress this step.
-      if (samePosition(destination, minotaur)) {
+      if (samePosition(destination, startingPosition)) {
         break;
       }
 
+      // Update the logical position, then animate only this Minotaur.
       minotaurs[i] = destination;
 
-      // Capture is checked after each individual step.
+      await animatePosition(
+        startingPosition,
+        destination,
+        (visualPosition) => {
+          const visualMinotaurs = minotaurs.map(copyPosition);
+          visualMinotaurs[i] = visualPosition;
+
+          drawBoard(theseus, visualMinotaurs);
+        }
+      );
+
+      // Check for capture after every individual step.
       if (samePosition(minotaurs[i], theseus)) {
-        drawBoard();
         finishGame(false);
         return;
       }
@@ -573,9 +647,7 @@ function runMinotaurTurn() {
   isAnimatingTurn = false;
   drawBoard();
 
-  setStatus(
-    `Turn ${moveCount} complete. Find an exit!`
-  );
+  setStatus(`Turn ${moveCount} complete. Find an exit!`);
 }
 
 // ------------------------------------------------------------

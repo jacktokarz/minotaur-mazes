@@ -10,13 +10,15 @@ import "./style.css";
 const canvas = document.querySelector("#game-board");
 const ctx = canvas.getContext("2d");
 
+const boardStage = document.querySelector("#board-stage");
+const boardMessage = document.querySelector("#board-message");
+
 const mapSelect = document.querySelector("#map-select");
 const gameTitle = document.querySelector("#game-title");
 const mapDescription = document.querySelector("#map-description");
 const gameStatus = document.querySelector("#game-status");
 
 const restartButton = document.querySelector("#restart-button");
-const homeButton = document.querySelector("#home-button");
 
 // ------------------------------------------------------------
 // Game settings
@@ -289,6 +291,8 @@ function resetGame() {
   setStatus(
     "Your turn. Guide Theseus to an exit without being caught."
   );
+  boardMessage.hidden = true;
+  boardMessage.textContent = "";
 }
 
 // ------------------------------------------------------------
@@ -298,7 +302,7 @@ function resetGame() {
 function resizeCanvas() {
   const maxWidth = Math.max(
     240,
-    Math.min(window.innerWidth - 32, 900)
+    Math.min(window.innerWidth - 64, 900)
   );
 
   const tileSize = Math.min(
@@ -306,11 +310,17 @@ function resizeCanvas() {
     Math.floor(maxWidth / width)
   );
 
-  canvas.width = width * tileSize;
-  canvas.height = height * tileSize;
+  const boardWidth = width * tileSize;
+  const boardHeight = height * tileSize;
 
-  canvas.style.width = `${canvas.width}px`;
-  canvas.style.height = `${canvas.height}px`;
+  canvas.width = boardWidth;
+  canvas.height = boardHeight;
+
+  canvas.style.width = `${boardWidth}px`;
+  canvas.style.height = `${boardHeight}px`;
+
+  boardStage.style.width = `${boardWidth}px`;
+  boardStage.style.height = `${boardHeight}px`;
 }
 
 // ------------------------------------------------------------
@@ -580,17 +590,25 @@ function finishGame(won) {
   drawBoard();
 
   if (won) {
-    setStatus(
+    const message =
       `You escaped through the portal in ${moveCount} move` +
-      `${moveCount === 1 ? "" : "s"}!`,
-      "won"
-    );
+      `${moveCount === 1 ? "" : "s"}!`;
+
+    setStatus(message, "won");
+
+    boardMessage.textContent = "You escaped!";
+    boardMessage.dataset.state = "won";
   } else {
     setStatus(
       "The Minotaur caught Theseus. Restart to try again.",
       "lost"
     );
+
+    boardMessage.textContent = "Caught by the Minotaur!";
+    boardMessage.dataset.state = "lost";
   }
+
+  boardMessage.hidden = false;
 }
 
 // ------------------------------------------------------------
@@ -643,14 +661,6 @@ mapSelect.addEventListener("change", () => {
 restartButton.addEventListener("click", () => {
   if (currentMapDefinition) {
     resetGame();
-  }
-});
-
-homeButton.addEventListener("click", () => {
-  updateAddress("", false);
-
-  if (maps.length > 0) {
-    selectMap(maps[0].name, { updateHistory: false });
   }
 });
 

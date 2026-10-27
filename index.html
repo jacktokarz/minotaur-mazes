@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -45,6 +46,22 @@
           </label>
         </div>
 
+        <section class="instructions" aria-labelledby="instructions-title">
+          <h2 id="instructions-title">How to play</h2>
+
+          <ol>
+            <li>Move Theseus through the maze toward a portal.</li>
+            <li>After each move, every Minotaur pursues Theseus.</li>
+            <li>
+              Each Minotaur attempts horizontal movement first, then
+              vertical movement, making up to two moves per turn.
+            </li>
+            <li>
+              Walls block movement. Reach any portal without being caught.
+            </li>
+          </ol>
+        </section>
+
         <div
           id="game-status"
           class="game-status"
@@ -55,30 +72,34 @@
         </div>
 
         <div class="board-container">
-          <canvas
-            id="game-board"
-            aria-label="Minotaur maze game board"
-            tabindex="0"
-          >
-            Your browser does not support the HTML canvas element.
-          </canvas>
+          <div id="board-stage" class="board-stage">
+            <canvas
+              id="game-board"
+              aria-label="Minotaur maze game board"
+              tabindex="0"
+            >
+              Your browser does not support the HTML canvas element.
+            </canvas>
+
+            <div
+              id="board-message"
+              class="board-message"
+              role="status"
+              aria-live="assertive"
+              hidden
+            ></div>
+          </div>
         </div>
 
         <div class="game-controls">
           <div class="keyboard-help">
             <strong>Move Theseus</strong>
-            <p>
-              Use the arrow keys or WASD.
-            </p>
+            <p>Use the arrow keys or WASD.</p>
           </div>
 
           <div class="button-group">
             <button id="restart-button" type="button">
               Restart maze
-            </button>
-
-            <button id="home-button" type="button">
-              All mazes
             </button>
           </div>
         </div>
@@ -103,26 +124,6 @@
           </div>
         </div>
       </section>
-
-      <section class="instructions">
-        <h2>How to play</h2>
-
-        <ol>
-          <li>Move Theseus through the maze toward the blue exit.</li>
-          <li>After each move, the Minotaur pursues Theseus.</li>
-          <li>
-            The Minotaur attempts horizontal movement first, then vertical
-            movement, making up to two moves per turn.
-          </li>
-          <li>
-            Walls block both characters. Reach the exit without being caught.
-          </li>
-        </ol>
-      </section>
-
-      <footer class="site-footer">
-        <a href="/">Browse all mazes</a>
-      </footer>
     </main>
 
     <script type="module" src="/src/main.js"></script>

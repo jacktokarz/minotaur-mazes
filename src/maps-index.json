@@ -1,0 +1,14 @@
+[
+  {
+    "name": "example",
+    "title": "Example",
+    "image": "/maps/example.txt",
+    "url": "/example"
+  },
+  {
+    "name": "test",
+    "title": "Test",
+    "image": "/maps/test.txt",
+    "url": "/test"
+  }
+]

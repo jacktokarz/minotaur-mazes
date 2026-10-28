@@ -166,7 +166,7 @@ function updateAddress(mapName, replace = false) {
 
 
 function findMapByName(name) {
-  return maps.find((map) => map.name === name);
+  return maps.find((map) => map.name.toLowerCase() === name.toLowerCase());
 }
 
 function getRequestedMapName() {

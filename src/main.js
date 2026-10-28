@@ -416,19 +416,6 @@ function drawBoard(
       "M"
     );
   }
-
-  // Highlight Theseus's current visual tile.
-  const tileSize = canvas.width / width;
-
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
-  ctx.lineWidth = Math.max(1, tileSize * 0.025);
-
-  ctx.strokeRect(
-    visualTheseus.x * tileSize + 2,
-    visualTheseus.y * tileSize + 2,
-    tileSize - 4,
-    tileSize - 4
-  );
 }
 
 function animatePosition(from, to, renderFrame) {

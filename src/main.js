@@ -1,4 +1,3 @@
-
 import maps from "./maps-index.json";
 import { loadMapText } from "./mapParser.js";
 import "./style.css";
@@ -18,11 +17,14 @@ const gameStatus = document.querySelector("#game-status");
 
 const restartButton = document.querySelector("#restart-button");
 
+const undoButton = document.querySelector("#undo-button");
+const moveHistory = [];
+
 // ------------------------------------------------------------
 // Game settings
 // ------------------------------------------------------------
 
-const DEFAULT_MAP = "Test";
+const DEFAULT_MAP = "test";
 const TILE_SIZE = 64;
 const MINOTAUR_STEPS_PER_TURN = 2;
 
@@ -166,7 +168,8 @@ function updateAddress(mapName, replace = false) {
 
 
 function findMapByName(name) {
-  return maps.find((map) => map.name.toLowerCase() === name.toLowerCase());
+  console.log("looking for ",name," in ",maps);
+  return maps.find((map) => map.name?.toLowerCase() === name?.toLowerCase());
 }
 
 function getRequestedMapName() {
@@ -234,6 +237,7 @@ async function selectMap(mapName, options = {}) {
 // ------------------------------------------------------------
 
 function resetGame() {
+  moveHistory.length = 0;
   theseus = copyPosition(initialTheseus);
 
   minotaurs = initialMinotaurs.map(copyPosition);
@@ -248,9 +252,14 @@ function resetGame() {
   resizeCanvas();
   drawBoard();
 
-  setStatus(
-    "Your turn. Guide Theseus to an exit without being caught."
-  );
+  if (currentMapName === "Harder") {
+    setStatus("So you thought you were clever. You thought you saw a pattern in puzzle names and decided that you could take a peep at the 'Harder' puzzle without paying for a premium subscription? Jack needs that premium money to buy a Switch 2. You're literally taking Nintendo games directly out of Jack's mouth. Theseus is ashamed of you. Even the minotaur won't look you in the eye. You wouldn't steal a car. What made you think it's okay to steal a puzzle.");
+  }
+  else {
+    setStatus(
+      "Your turn. Guide Theseus to an exit without being caught."
+    );
+  }
   boardMessage.hidden = true;
   boardMessage.textContent = "";
 }
@@ -272,6 +281,8 @@ function resizeCanvas() {
 
   const boardWidth = width * tileSize;
   const boardHeight = height * tileSize;
+
+  console.log("max width ",maxWidth,". board width: ",boardWidth);
 
   canvas.width = boardWidth;
   canvas.height = boardHeight;
@@ -473,6 +484,44 @@ function getDestination(position, direction) {
 }
 
 
+function saveGameState() {
+  moveHistory.push({
+    theseus: copyPosition(theseus),
+    minotaurs: minotaurs.map(copyPosition),
+    moveCount: moveCount,
+  });
+}
+
+function undoMove() {
+  // Don't interrupt a character animation.
+  if (isAnimatingTurn) return;
+
+  // Nothing left to undo.
+  if (moveHistory.length === 0) {
+    setStatus("There are no moves to undo.");
+    return;
+  }
+
+  // Restore the previous board state.
+  const previousState = moveHistory.pop();
+
+  theseus = previousState.theseus;
+  minotaurs = previousState.minotaurs;
+  moveCount = previousState.moveCount;
+
+  // Allow play to continue if the player had won or lost.
+  gameOver = false;
+
+  // Hide the victory or defeat message, if present.
+  boardMessage.hidden = true;
+  boardMessage.textContent = "";
+  boardMessage.removeAttribute("data-state");
+
+  // Redraw the board and update the status.
+  drawBoard();
+  setStatus(`Turn ${moveCount}. Find an exit!`);
+}
+
 async function moveTheseus(direction) {
   if (gameOver || isAnimatingTurn || !theseus) {
     return;
@@ -485,6 +534,7 @@ async function moveTheseus(direction) {
     return;
   }
 
+  saveGameState();
   isAnimatingTurn = true;
 
   const startingPosition = copyPosition(theseus);
@@ -690,6 +740,8 @@ restartButton.addEventListener("click", () => {
   }
 });
 
+undoButton.addEventListener("click", undoMove);
+
 document.addEventListener("keydown", (event) => {
   if (
     event.target instanceof HTMLInputElement ||
@@ -731,7 +783,7 @@ async function startGame() {
   await loadAssets();
 
   const requestedMap = getRequestedMapName();
-
+  console.log("original requested is ",requestedMap);
   const startingMap = findMapByName(requestedMap)
     ? requestedMap
     : DEFAULT_MAP;

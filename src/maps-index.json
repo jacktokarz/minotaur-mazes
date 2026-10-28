@@ -6,6 +6,12 @@
     "url": "/Easier"
   },
   {
+    "name": "Expert",
+    "title": "Expert",
+    "image": "/maps/Expert.txt",
+    "url": "/Expert"
+  },
+  {
     "name": "Harder",
     "title": "Harder",
     "image": "/maps/Harder.txt",

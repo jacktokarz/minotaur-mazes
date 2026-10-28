@@ -13,9 +13,7 @@ const ctx = canvas.getContext("2d");
 const boardStage = document.querySelector("#board-stage");
 const boardMessage = document.querySelector("#board-message");
 
-const mapSelect = document.querySelector("#map-select");
 const gameTitle = document.querySelector("#game-title");
-const mapDescription = document.querySelector("#map-description");
 const gameStatus = document.querySelector("#game-status");
 
 const restartButton = document.querySelector("#restart-button");
@@ -24,10 +22,11 @@ const restartButton = document.querySelector("#restart-button");
 // Game settings
 // ------------------------------------------------------------
 
+const DEFAULT_MAP = "Test";
 const TILE_SIZE = 64;
 const MINOTAUR_STEPS_PER_TURN = 2;
 
-const TILE_ANIMATION_MS = 500;
+const TILE_ANIMATION_MS = 200;
 
 const ASSET_PATHS = {
   floor: "/assets/floor.png",
@@ -165,37 +164,6 @@ function updateAddress(mapName, replace = false) {
 // Map selection and loading
 // ------------------------------------------------------------
 
-function populateMapSelector() {
-  mapSelect.replaceChildren();
-
-  for (const map of maps) {
-    const option = document.createElement("option");
-
-    option.value = map.name;
-    option.textContent = map.title;
-
-    mapSelect.appendChild(option);
-  }
-
-  if (maps.length === 0) {
-    const option = document.createElement("option");
-
-    option.value = "";
-    option.textContent = "No maps found";
-
-    mapSelect.appendChild(option);
-    mapSelect.disabled = true;
-
-    setStatus(
-      "No maps were found. Add .txt maps to public/maps/.",
-      "error"
-    );
-
-    return;
-  }
-
-  mapSelect.disabled = false;
-}
 
 function findMapByName(name) {
   return maps.find((map) => map.name === name);
@@ -210,7 +178,6 @@ function getRequestedMapName() {
   if (!segment) {
     return null;
   }
-
   try {
     return decodeURIComponent(segment);
   } catch {
@@ -226,7 +193,6 @@ async function selectMap(mapName, options = {}) {
     setStatus(`Map "${mapName}" was not found.`, "error");
     return;
   }
-
   try {
     setStatus("Loading maze…");
 
@@ -246,15 +212,7 @@ async function selectMap(mapName, options = {}) {
 
     initialExits = parsedMap.exits.map(copyPosition);
 
-    mapSelect.value = definition.name;
     gameTitle.textContent = definition.title;
-
-    mapDescription.textContent =
-      `${width} columns × ${height} rows · ` +
-      `${initialMinotaurs.length} Minotaur` +
-      `${initialMinotaurs.length === 1 ? "" : "s"} · ` +
-      `${initialExits.length} exit` +
-      `${initialExits.length === 1 ? "" : "s"}`;
 
     resetGame();
 
@@ -543,15 +501,15 @@ async function moveTheseus(direction) {
     }
   );
 
-  // Reaching any portal wins immediately.
-  if (isExit(theseus)) {
-    finishGame(true);
-    return;
-  }
-
   // Capture is checked before the Minotaurs move.
   if (isMinotaurAt(theseus)) {
     finishGame(false);
+    return;
+  }
+
+  // Reaching any portal wins immediately.
+  if (isExit(theseus)) {
+    finishGame(true);
     return;
   }
 
@@ -726,10 +684,6 @@ function handleTouchControl(event) {
   moveTheseus(button.dataset.move);
 }
 
-mapSelect.addEventListener("change", () => {
-  selectMap(mapSelect.value);
-});
-
 restartButton.addEventListener("click", () => {
   if (currentMapDefinition) {
     resetGame();
@@ -761,7 +715,6 @@ window.addEventListener("resize", () => {
 
 window.addEventListener("popstate", () => {
   const requestedMap = getRequestedMapName();
-
   if (requestedMap && findMapByName(requestedMap)) {
     selectMap(requestedMap, { updateHistory: false });
   } else if (maps.length > 0) {
@@ -774,11 +727,6 @@ window.addEventListener("popstate", () => {
 // ------------------------------------------------------------
 
 async function startGame() {
-  populateMapSelector();
-
-  if (maps.length === 0) {
-    return;
-  }
 
   await loadAssets();
 
@@ -786,7 +734,7 @@ async function startGame() {
 
   const startingMap = findMapByName(requestedMap)
     ? requestedMap
-    : maps[0].name;
+    : DEFAULT_MAP;
 
   await selectMap(startingMap, {
     updateHistory: !requestedMap,

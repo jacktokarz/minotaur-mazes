@@ -1,14 +1,26 @@
 [
   {
-    "name": "example",
-    "title": "Example",
-    "image": "/maps/example.txt",
-    "url": "/example"
+    "name": "Easier",
+    "title": "Easier",
+    "image": "/maps/Easier.txt",
+    "url": "/Easier"
   },
   {
-    "name": "test",
+    "name": "Harder",
+    "title": "Harder",
+    "image": "/maps/Harder.txt",
+    "url": "/Harder"
+  },
+  {
+    "name": "Mediumer",
+    "title": "Mediumer",
+    "image": "/maps/Mediumer.txt",
+    "url": "/Mediumer"
+  },
+  {
+    "name": "Test",
     "title": "Test",
-    "image": "/maps/test.txt",
-    "url": "/test"
+    "image": "/maps/Test.txt",
+    "url": "/Test"
   }
 ]

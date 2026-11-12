@@ -1,12 +1,14 @@
 {
-  "name": "minotaur-mazes",
+  "name": "professional-puzzles",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node scripts/generate-map-index.mjs && vite",
-    "build": "node scripts/generate-map-index.mjs && vite build",
-    "preview": "vite preview"
+    "puzzles": "node scripts/generate-map-index.mjs && node scripts/build-zoo-puzzles.mjs",
+    "dev": "npm run puzzles && vite",
+    "build": "npm run puzzles && vite build",
+    "preview": "vite preview",
+    "zoo-test": "node scripts/zoo-test.mjs"
   },
   "devDependencies": {
     "vite": "^6.4.5"

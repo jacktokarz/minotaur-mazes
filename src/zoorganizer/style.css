@@ -1,0 +1,62 @@
+/* zoOrganizer – styles used only by this puzzle.
+   Site-wide styles: src/shared/base.css. Game page layout: src/shared/game.css. */
+
+/* The animals' preferences are the puzzle itself, so they stand out a bit
+   more than the generic "How to play" list. */
+.zoo-clues {
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgb(0 0 0 / 12%);
+}
+
+/* The opening "You're opening your own zoo..." paragraph. */
+.zoo-premise {
+  margin: 0 0 10px;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.zoo-clue-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 22px;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.zoo-clue-list strong {
+  color: var(--accent);
+}
+
+/* Drag-and-drop on the board: the script decides when the page may scroll. */
+#game-board {
+  image-rendering: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.game-buttons button:disabled {
+  cursor: not-allowed;
+}
+
+/* Allow the win message to sit on two lines. */
+#board-message {
+  white-space: pre-line;
+}
+
+/* On phones, let the board use the full width of the panel so the zoo can
+   be drawn as large as possible. */
+@media (max-width: 640px) {
+  .game-panel .board-container {
+    width: auto;
+    margin-inline: -14px;
+    padding-inline: 2px;
+    border-inline: 0;
+    border-radius: 0;
+  }
+}

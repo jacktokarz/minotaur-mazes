@@ -1,0 +1,198 @@
+/*
+ * Site-wide styles shared by every page (landing page + each puzzle type).
+ * Theme colours are defined once here as CSS variables.
+ * Puzzle-specific styles live next to each puzzle, e.g.
+ * src/minotaur-mazes/style.css.
+ */
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: #f1eadb;
+  background: #171916;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --background: #171916;
+  --panel: #242820;
+  --panel-light: #30362b;
+  --border: #454b3c;
+  --text: #f1eadb;
+  --muted: #b8b9aa;
+  --accent: #d7b56d;
+  --accent-hover: #e9cb88;
+  --success: #8fce8b;
+  --danger: #ef8b80;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--background);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+button,
+select {
+  font: inherit;
+}
+
+button,
+select,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+select:focus-visible,
+a:focus-visible,
+canvas:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+.app {
+  width: min(100% - 32px, 1040px);
+  margin: 0 auto;
+  padding: 28px 0 36px;
+}
+
+.site-header {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.site-title {
+  display: inline-block;
+  color: var(--accent);
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+}
+
+.site-subtitle {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+/* ------------------------------------------------------------
+   Shared components
+   ------------------------------------------------------------ */
+
+/* Small "back to all puzzles" link shown at the top of puzzle pages. */
+.site-nav {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  color: var(--muted);
+}
+
+.site-nav a:hover {
+  color: var(--accent-hover);
+}
+
+/* Generic content panel (same look as the game panel). */
+.panel {
+  padding: clamp(16px, 3vw, 28px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--panel);
+  box-shadow: 0 14px 40px rgb(0 0 0 / 20%);
+}
+
+/* Link styled as a button. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 10px 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  background: var(--panel-light);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease,
+    transform 120ms ease;
+}
+
+.button:hover {
+  border-color: var(--accent);
+  color: var(--text);
+  background: #3a4131;
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.button-primary {
+  border-color: var(--accent);
+  color: #1d1a12;
+  background: var(--accent);
+}
+
+.button-primary:hover {
+  border-color: var(--accent-hover);
+  color: #1d1a12;
+  background: var(--accent-hover);
+}
+
+@media (max-width: 640px) {
+  .app {
+    width: min(100% - 20px, 1040px);
+    padding-top: 20px;
+  }
+
+  .site-header {
+    margin-bottom: 20px;
+  }
+
+  .panel {
+    padding: 14px;
+    border-radius: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

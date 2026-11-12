@@ -1,0 +1,65 @@
+# zoOrganizer expert puzzle. See README.md in this folder for the file format.
+title: Expert
+# post: ''
+
+[animals]
+1: Boisterous Baboon
+2: Bathing Baboon
+3: Brash Baboon
+4: Baby Baboon
+5: Benevolent Baboon
+6: Gorilla
+7: Chimpanzee
+8: Gibbon
+9: Golden Lion Tamarin
+10: Pygmy Marmoset
+11: Outrageous Orangutan
+12: Obvious Orangutan
+
+[enclosures]
+A: snow
+B: sand
+C: jungle
+D: jungle
+E: jungle
+F: grass
+G: water
+H: water
+
+[layout]
+^,^,,..,^,^,
+,..........,
+^.AA.BBCC..,
+^.AA.BBCC..^
+^.DDDEEFFF..
+,.DDDEEFFF.,
+,.GG.EE.HH.,
+^.GG.EE.HH.^
+,..........^
+
+[clues]
+Boisterous Baboon: "I like to be heard. Put me in the enclosure that is next to at least half of the other animals."
+Bathing Baboon: "I want to be alone in my space, without Jungle or Grass."
+Brash Baboon: "I'm a monkey who will only share my space with monkeys. I want to be next to exactly 2 different enclosure types."
+Baby Baboon: "I'm little and want to play! Put me in the Jungle with 1 Monkey and 1 Ape."
+Benevolent Baboon: "I don't want any other Baboons in Sand. But I want all Baboons to be next to another Baboon."
+Gorilla: "I'm the biggest ape. Don't put me in the smallest size enclosures."
+Chimpanzee: "I'm a friendly ape. I want to share the Water. with an Ape."
+Gibbon: "I want to be next to the biggest ape, since I'm the smallest one. I don't like the Jungle."
+Golden Lion Tamarin: "I'm a little monkey. I want to be with another little monkey."
+Pygmy Marmoset: "I'm a little monkey who wants only Apes next to me. I don't like Grass."
+Outrageous Orangutan: "I want to be next to exactly 3 animals in 3 enclosures."
+Obvious Orangutan: "I am an ape who wants to share my space with only one ape."
+
+[rules]
+# The clues above, written as rules so "npm run zoo-test expert" can check them.
+
+[solution]
+A: 2
+B: 5
+C: 3
+D: 4, 6, 9
+E: 1
+F: 11, 12
+G: 7, 8
+H: 10

@@ -1,0 +1,56 @@
+# zoOrganizer easier puzzle. See README.md in this folder for the file format.
+title: Easier
+# post: ''
+
+[animals]
+1: Fossa
+2: Monitor Lizard
+3: Snowy Owl
+4: Ring-Tailed Lemur
+5: Brown Bear
+6: Snake-necked Turtle
+
+[enclosures]
+A: jungle
+B: snow
+C: jungle
+D: grass
+E: sand
+
+[layout]
+^,^,,..,^,^,
+,..........,
+^.AAABBCCC.,
+^.AAABBCCC.^
+^..DDDEEE..^
+,,.DDDEEE.,,
+,^........^^
+
+[clues]
+Fossa: "I'm a small predator."
+Monitor Lizard: "I need to be somewhere sandy without any predators."
+Snowy Owl: "I'm nosey, I want to be next door to at least 4 other animals."
+Ring-Tailed Lemur: "I'm afraid! I need to have a friend in my enclosure who is not a predator, and I can't have a predator in my enclosure or next door to me."
+Brown Bear: "I'm a large predator; I can't be trusted with anybody. I need too much space for the jungle."
+Snake-necked Turtle: "I'm an herbivore, I need to be in the jungle."
+
+[rules]
+# The clues above, written as rules so "npm run zoo-test easier" can check them.
+group predators: 1, 5
+group prey: all except predators
+2 in sand                       # Monitor Lizard: somewhere sandy...
+2 with no predators             # ...without any predators
+3 next to at least 4 animals    # Snowy Owl
+4 with at least 1 prey          # Lemur: a friend who is not a predator
+4 with no predators             # Lemur: no predator in my enclosure...
+4 next to no predators          # ...or next door
+5 alone                         # Brown Bear: can't be trusted with anybody
+5 not in jungle                 # Brown Bear: too big for the jungle
+6 in jungle                     # Turtle
+
+[solution]
+A: 1
+B: 3
+C: 4, 6
+D: 5
+E: 2

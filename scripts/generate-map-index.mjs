@@ -5,8 +5,12 @@ import { fileURLToPath } from "node:url";
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectDirectory = path.resolve(scriptDirectory, "..");
 
-const mapsDirectory = path.join(projectDirectory, "public", "maps");
-const outputFile = path.join(projectDirectory, "src", "maps-index.json");
+// Minotaur Mazes lives under /minotaur-mazes/ on the website.
+// Drop new maze .txt files into public/minotaur-mazes/maps/.
+const PUZZLE_SLUG = "minotaur-mazes";
+
+const mapsDirectory = path.join(projectDirectory, "public", PUZZLE_SLUG, "maps");
+const outputFile = path.join(projectDirectory, "src", PUZZLE_SLUG, "maps-index.json");
 
 const supportedExtensions = new Set([
   ".txt",
@@ -38,8 +42,8 @@ function generateMapIndex() {
     title: getMapName(filename)
       .replace(/[-_]+/g, " ")
       .replace(/\b\w/g, (character) => character.toUpperCase()),
-    image: `/maps/${encodeURIComponent(filename)}`,
-    url: `/${encodeURIComponent(getMapName(filename))}`,
+    image: `/${PUZZLE_SLUG}/maps/${encodeURIComponent(filename)}`,
+    url: `/${PUZZLE_SLUG}/${encodeURIComponent(getMapName(filename))}`,
   }));
 
   fs.mkdirSync(path.dirname(outputFile), { recursive: true });

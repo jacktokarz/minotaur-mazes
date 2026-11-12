@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Easier",
+    "title": "Easier",
+    "image": "/minotaur-mazes/maps/Easier.txt",
+    "url": "/minotaur-mazes/Easier"
+  },
+  {
+    "name": "Expert",
+    "title": "Expert",
+    "image": "/minotaur-mazes/maps/Expert.txt",
+    "url": "/minotaur-mazes/Expert"
+  },
+  {
+    "name": "Harder",
+    "title": "Harder",
+    "image": "/minotaur-mazes/maps/Harder.txt",
+    "url": "/minotaur-mazes/Harder"
+  },
+  {
+    "name": "Mediumer",
+    "title": "Mediumer",
+    "image": "/minotaur-mazes/maps/Mediumer.txt",
+    "url": "/minotaur-mazes/Mediumer"
+  },
+  {
+    "name": "Test",
+    "title": "Test",
+    "image": "/minotaur-mazes/maps/Test.txt",
+    "url": "/minotaur-mazes/Test"
+  }
+]

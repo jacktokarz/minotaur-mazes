@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -11,121 +10,76 @@
 
     <meta
       name="description"
-      content="Play custom Minotaur maze puzzles."
+      content="Interactive logic puzzles from the Professional Puzzles Substack."
     />
 
-    <title>Minotaur Mazes</title>
+    <title>Professional Puzzles</title>
   </head>
 
   <body>
     <main class="app">
       <header class="site-header">
-        <a class="site-title" href="/" aria-label="Minotaur Mazes home">
-          Minotaur Mazes
+        <a class="site-title" href="/" aria-label="Professional Puzzles home">
+          Professional Puzzles
         </a>
 
         <p class="site-subtitle">
-          Guide Theseus to the exit. Don't get caught!
+          Interactive logic puzzles you can't solve in your head.
         </p>
       </header>
 
-      <section class="game-panel" aria-labelledby="game-title">
-        <div class="game-toolbar">
-          <div>
-            <h1 id="game-title">No Map Found</h1>
-          </div>
+      <!-- Shown only when someone follows a link to a page that doesn't exist. -->
+      <div
+        id="page-notice"
+        class="page-notice"
+        role="status"
+        aria-live="polite"
+        hidden
+      ></div>
+
+      <section class="panel substack-panel" aria-labelledby="substack-title">
+        <div class="substack-text">
+          <h2 id="substack-title">
+            New puzzles every week on
+            <a href="https://propuzz.substack.com/">Professional Puzzles</a>
+          </h2>
+
+          <p>
+            Every Thursday morning I send out 2 new logic puzzles. The first
+            is always easy(er) and freely available, the second is hard(er)
+            and only available to premium subscribers. The puzzle formats are
+            different every week!
+          </p>
         </div>
 
-        <section class="instructions" aria-labelledby="instructions-title">
-          <h2 id="instructions-title">How to play</h2>
-
-          <ol>
-            <li>Move Theseus through the maze toward a portal.</li>
-            <li>After each move, every Minotaur pursues Theseus.</li>
-            <li>
-              Each Minotaur attempts horizontal movement first, then
-              vertical movement, making up to two moves per turn.
-            </li>
-            <li>
-              Walls block movement. Reach any portal without being caught.
-            </li>
-          </ol>
-        </section>
-
-        <div
-          id="game-status"
-          class="game-status"
-          role="status"
-          aria-live="polite"
-        >
-          Loading the game…
-        </div>
-
-        <div class="board-container">
-          <div id="board-stage" class="board-stage">
-            <canvas
-              id="game-board"
-              aria-label="Minotaur maze game board"
-              tabindex="0"
-            >
-              Your browser does not support the HTML canvas element.
-            </canvas>
-
-            <div
-              id="board-message"
-              class="board-message"
-              role="status"
-              aria-live="assertive"
-              hidden
-            ></div>
-          </div>
-        </div>
-
-        <div class="game-controls">
-          <div class="keyboard-help">
-            <strong>Move Theseus</strong>
-            <p>Use the arrow keys or WASD.</p>
-          </div>
-
-          <div class="game-buttons">
-            <button id="undo-button" type="button">Undo Last Move</button>
-            <button id="restart-button" type="button">Restart Maze</button>
-          </div>
-        </div>
-
-        <div class="touch-controls" aria-label="Touch movement controls">
-          <button type="button" data-move="up" aria-label="Move up">
-            ▲
-          </button>
-
-          <div class="touch-controls-middle">
-            <button type="button" data-move="left" aria-label="Move left">
-              ◀
-            </button>
-
-            <button type="button" data-move="down" aria-label="Move down">
-              ▼
-            </button>
-
-            <button type="button" data-move="right" aria-label="Move right">
-              ▶
-            </button>
-          </div>
-        </div>
+        <a class="button button-primary" href="https://propuzz.substack.com/">
+          Subscribe on Substack
+        </a>
       </section>
-      <div>
-        <br />
+
+      <section class="puzzle-types" aria-labelledby="puzzle-types-title">
+        <h2 id="puzzle-types-title" class="section-title">Puzzle types</h2>
+
+        <!-- Cards are generated from src/puzzles.js -->
+        <div id="puzzle-grid" class="puzzle-grid"></div>
+
+        <noscript>
+          <p class="page-notice">
+            Please enable JavaScript to see the puzzles. You can go straight
+            to <a href="/minotaur-mazes/">Minotaur Mazes</a>.
+          </p>
+        </noscript>
+      </section>
+
+      <footer class="site-footer">
         <strong>Credits</strong>
-        <p>This website and these puzzles created by: <a href="https://propuzz.substack.com">Jack Tokarz</a></p>
         <p>
-          Gameplay and art by: <a href="https://puzzle-dungeon.github.io/puzzles/minotaur.html">
-            Puzzle-Dungeon
-          </a> (cloned from <a href="https://github.com/mig0/puzzle-dungeon/tree/master">this repo</a> by mig0)
+          This website and these puzzles created by:
+          <a href="https://propuzz.substack.com">Jack Tokarz</a>
         </p>
-        <p>Original mechanics from: <a href="https://en.wikipedia.org/wiki/Robert_Abbott_(game_designer)#Theseus_and_the_Minotaur">
-        Theseus and the Minotaur</a> logic mazes designed by Robert Abbott</p>
+      </footer>
     </main>
 
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/landing/main.js"></script>
   </body>
 </html>

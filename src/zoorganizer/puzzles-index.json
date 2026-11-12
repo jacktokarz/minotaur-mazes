@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Easier",
+    "title": "Easier",
+    "data": "/zoorganizer/puzzles/Easier.json",
+    "url": "/zoorganizer/Easier"
+  },
+  {
+    "name": "Expert",
+    "title": "Expert",
+    "data": "/zoorganizer/puzzles/Expert.json",
+    "url": "/zoorganizer/Expert"
+  }
+]

@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/minotaur-mazes/:path*",
+      "destination": "/minotaur-mazes/index.html"
+    },
+    {
+      "source": "/zoorganizer/:path*",
+      "destination": "/zoorganizer/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

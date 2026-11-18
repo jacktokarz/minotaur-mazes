@@ -1,0 +1,31 @@
+/* Mirror Maze (Placement) – styles used only by this puzzle.
+   The board itself: src/mirror-maze/board.css. Page layout: src/shared/game.css. */
+
+/* The "you can use at most N mirrors" line in How to play. */
+.mm-limit-rule {
+  color: var(--text);
+}
+
+.mm-limit-rule strong {
+  color: var(--accent);
+}
+
+/* Mirror counter under the board. */
+.mm-counter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 26px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.mm-count[hidden] {
+  display: none;
+}
+
+.mm-count strong {
+  color: var(--text);
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+}

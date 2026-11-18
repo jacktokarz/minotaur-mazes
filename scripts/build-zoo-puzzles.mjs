@@ -73,6 +73,7 @@ function build() {
 
   const index = [];
   const missingArt = new Set();
+  const missingHints = [];
   const sprites = listSprites();
   let failed = false;
 
@@ -108,6 +109,8 @@ function build() {
       return { ...animal, image: image?.url ?? null };
     });
 
+    if (!puzzle.hints) missingHints.push(name);
+
     const outputFile = path.join(outputDirectory, `${name}.json`);
     fs.writeFileSync(outputFile, JSON.stringify(published) + "\n", "utf8");
 
@@ -142,6 +145,13 @@ function build() {
     console.log(
       `zoOrganizer: no artwork yet for ${[...missingArt].join(", ")} ` +
         `(add PNGs to ${relative(animalsDirectory)}/). They will show as name tags until then.`
+    );
+  }
+
+  if (missingHints.length) {
+    console.log(
+      `zoOrganizer: no [hints] yet for ${missingHints.join(", ")}. ` +
+        "Those puzzles won't show a Hint button until you add them."
     );
   }
 }

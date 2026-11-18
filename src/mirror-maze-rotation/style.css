@@ -1,0 +1,142 @@
+/* Mirror Maze (Rotation) – styles used only by this puzzle.
+   The board itself: src/mirror-maze/board.css. Page layout: src/shared/game.css. */
+
+/* Firing number on each icon. */
+.mm-order-badge {
+  position: absolute;
+  top: 4%;
+  right: 4%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-width: 38%;
+  height: 38%;
+  padding: 0 4%;
+  border: 2px solid #171916;
+  border-radius: 999px;
+  color: #171916;
+  background: var(--accent);
+  font-size: calc(100cqi / var(--cols, 7) * 0.26);
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.mm-order-badge[hidden] {
+  display: none;
+}
+
+/* Icons without a number look a little faded, so it's clear what's left. */
+.mm-letter .mm-icon {
+  transition: opacity 150ms ease;
+}
+
+.mm-letter:not(.mm-numbered) .mm-icon {
+  opacity: 0.75;
+}
+
+/* The pair that is firing right now. */
+.mm-letter.mm-firing {
+  box-shadow:
+    inset 0 0 0 3px var(--letter-color),
+    0 0 14px color-mix(in srgb, var(--letter-color) 60%, transparent);
+}
+
+.mm-letter.mm-firing .mm-icon {
+  opacity: 1;
+  animation: mm-pulse 900ms ease-in-out infinite alternate;
+}
+
+@keyframes mm-pulse {
+  to {
+    transform: scale(1.12);
+  }
+}
+
+/* The firing order under the board. */
+.mm-order {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 12px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.mm-order-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mm-slot {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 38px;
+  padding: 0 8px 0 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel-light);
+}
+
+.mm-slot-number {
+  min-width: 1.1em;
+  color: var(--text);
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.mm-slot-icon {
+  width: 24px;
+  height: 24px;
+  fill: var(--icon-color);
+}
+
+.mm-slot-empty {
+  border-style: dashed;
+  background: transparent;
+}
+
+.mm-slot-empty::after {
+  content: "";
+  width: 24px;
+  height: 24px;
+}
+
+.mm-slot-done {
+  border-color: #547d4d;
+  background: rgb(73 132 65 / 18%);
+}
+
+.mm-slot-current {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgb(215 181 109 / 30%);
+}
+
+/* Continue stands out while the pairs are firing. */
+.game-buttons .continue-button {
+  border: 1px solid var(--accent);
+  color: #1d1a12;
+  background: var(--accent);
+  font-weight: 700;
+}
+
+.game-buttons .continue-button:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.game-buttons button:disabled {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mm-letter.mm-firing .mm-icon {
+    animation: none;
+  }
+}

@@ -7,7 +7,13 @@ const root = path.dirname(fileURLToPath(import.meta.url));
 // Each puzzle type has its own page at /<slug>/, built from <slug>/index.html.
 // When you add a new puzzle type, add its slug here AND add a matching
 // rewrite to vercel.json.
-const PUZZLE_PAGES = ["minotaur-mazes", "zoorganizer"];
+const PUZZLE_PAGES = [
+  "minotaur-mazes",
+  "zoorganizer",
+  "mirror-maze-placement",
+  "mirror-maze-rotation",
+  "space-roundup",
+];
 
 /**
  * Serve /<slug>/<anything> with that puzzle's index.html while developing

@@ -1,6 +1,8 @@
 import puzzles from "./puzzles-index.json";
 import { hashArrangement } from "./solutionCheck.js";
 import { renderSourceBanner } from "../shared/sourceBanner.js";
+import { createHints } from "../shared/hints.js";
+import { createStatus } from "../shared/status.js";
 import "../shared/base.css";
 import "../shared/game.css";
 import "./style.css";
@@ -21,6 +23,8 @@ const cluesElement = document.querySelector("#puzzle-clues");
 
 const submitButton = document.querySelector("#submit-button");
 const resetButton = document.querySelector("#reset-button");
+
+const hints = createHints(document.querySelector("#hint-button"));
 
 // ------------------------------------------------------------
 // Settings
@@ -152,10 +156,7 @@ const background = document.createElement("canvas");
 // Helpers
 // ------------------------------------------------------------
 
-function setStatus(message, type = "") {
-  gameStatus.textContent = message;
-  gameStatus.dataset.state = type;
-}
+const setStatus = createStatus(gameStatus);
 
 function cellAt(x, y) {
   return puzzle.grid[y]?.[x] ?? null;
@@ -1234,6 +1235,7 @@ async function selectPuzzle(name, { updateHistory = true } = {}) {
       "Read the original post for more puzzles."
     );
     renderPuzzleText();
+    hints.load(puzzle.hints ?? null);
     buildEnclosures();
     createAnimals();
     layoutBoard();

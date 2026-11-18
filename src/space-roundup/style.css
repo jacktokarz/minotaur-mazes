@@ -1,0 +1,200 @@
+/* Space Roundup – styles used only by this puzzle.
+   Tiles: public/space-roundup/tiles/ (drawn by tools/art/space_tiles.py).
+   Page layout: src/shared/game.css. */
+
+.sr-board-container {
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+/* The maze, with the creatures and exit on a layer above it. */
+.sr-board-wrap {
+  position: relative;
+  /* Squares are up to 56px, never below 28px (the panel scrolls instead). */
+  width: max(min(100%, calc(var(--cols, 9) * 56px)), calc(var(--cols, 9) * 28px));
+  border: 2px solid #05070f;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 40%);
+  /* Swipes move the player instead of scrolling the page. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.sr-board {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 9), 1fr);
+}
+
+.sr-cell {
+  aspect-ratio: 1;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+}
+
+.sr-space-1 { background-image: url("/space-roundup/tiles/space-1.png"); }
+.sr-space-2 { background-image: url("/space-roundup/tiles/space-2.png"); }
+.sr-space-3 { background-image: url("/space-roundup/tiles/space-3.png"); }
+.sr-asteroid-1 { background-image: url("/space-roundup/tiles/asteroid-1.png"); }
+.sr-asteroid-2 { background-image: url("/space-roundup/tiles/asteroid-2.png"); }
+.sr-asteroid-3 { background-image: url("/space-roundup/tiles/asteroid-3.png"); }
+
+.sr-sprites {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sr-sprite {
+  position: absolute;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+  transition-property: left, top, transform, opacity;
+  transition-timing-function: cubic-bezier(0.25, 0.8, 0.35, 1);
+}
+
+.sr-player {
+  z-index: 3;
+  filter: drop-shadow(0 0 4px rgb(120 220 255 / 55%));
+}
+
+.sr-friend {
+  z-index: 2;
+  animation: sr-bob 1.6s ease-in-out infinite alternate;
+}
+
+/* Friends bob gently, each a little out of step with the others. */
+.sr-friend:nth-child(2n) { animation-delay: -0.5s; }
+.sr-friend:nth-child(3n) { animation-delay: -1s; }
+
+@keyframes sr-bob {
+  to {
+    transform: translateY(-6%);
+  }
+}
+
+.sr-friend.sr-hopping {
+  animation: none;
+  transform: scale(0.55);
+  transition-duration: 350ms;
+}
+
+.sr-friend.sr-collected {
+  animation: none;
+  opacity: 0;
+  transform: scale(0.3);
+}
+
+.sr-exit {
+  z-index: 1;
+  background-image: url("/space-roundup/tiles/exit-locked.png");
+}
+
+.sr-exit.sr-open {
+  background-image: url("/space-roundup/tiles/exit-open.png");
+  filter: drop-shadow(0 0 6px rgb(111 227 198 / 80%));
+  animation: sr-spin 4s linear infinite;
+}
+
+@keyframes sr-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Flying out through the exit. */
+.sr-player.sr-escaped {
+  opacity: 0;
+  transform: scale(0.2) rotate(540deg);
+  transition-duration: 500ms !important;
+}
+
+/* A wobble when the player can't move that way. */
+.sr-player.sr-bump[data-bump="up"] { --bump-x: 0; --bump-y: -12%; }
+.sr-player.sr-bump[data-bump="down"] { --bump-x: 0; --bump-y: 12%; }
+.sr-player.sr-bump[data-bump="left"] { --bump-x: -12%; --bump-y: 0; }
+.sr-player.sr-bump[data-bump="right"] { --bump-x: 12%; --bump-y: 0; }
+
+.sr-player.sr-bump {
+  animation: sr-bump 220ms ease-out;
+}
+
+@keyframes sr-bump {
+  40% {
+    transform: translate(var(--bump-x), var(--bump-y));
+  }
+}
+
+/* Friends found, under the maze. */
+.sr-friends {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.sr-friends strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-friend-icons {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.sr-friend-icon {
+  width: 28px;
+  height: 28px;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+  opacity: 0.3;
+  filter: grayscale(1);
+  transition: opacity 200ms ease, filter 200ms ease;
+}
+
+.sr-friend-icon.sr-found {
+  opacity: 1;
+  filter: none;
+}
+
+/* The on-screen arrows are useful with a mouse too, so show them everywhere. */
+.sr-touch-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.sr-touch-controls .touch-controls-middle {
+  display: flex;
+  gap: 8px;
+}
+
+.sr-touch-controls button {
+  width: 52px;
+  min-height: 46px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  background: var(--panel-light);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.sr-touch-controls button:hover {
+  border-color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sr-friend,
+  .sr-exit.sr-open,
+  .sr-player.sr-bump {
+    animation: none;
+  }
+}

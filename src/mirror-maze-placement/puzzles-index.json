@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Easier",
+    "title": "Easier",
+    "data": "/mirror-maze-placement/puzzles/Easier.json",
+    "url": "/mirror-maze-placement/Easier"
+  },
+  {
+    "name": "Harder",
+    "title": "Harder",
+    "data": "/mirror-maze-placement/puzzles/Harder.json",
+    "url": "/mirror-maze-placement/Harder"
+  }
+]

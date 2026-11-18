@@ -9,6 +9,18 @@
       "destination": "/zoorganizer/index.html"
     },
     {
+      "source": "/mirror-maze-placement/:path*",
+      "destination": "/mirror-maze-placement/index.html"
+    },
+    {
+      "source": "/mirror-maze-rotation/:path*",
+      "destination": "/mirror-maze-rotation/index.html"
+    },
+    {
+      "source": "/space-roundup/:path*",
+      "destination": "/space-roundup/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

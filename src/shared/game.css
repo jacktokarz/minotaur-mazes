@@ -14,6 +14,7 @@
 
 .game-buttons {
   display: flex;
+  flex-shrink: 0; /* keep the buttons on one line; the help text wraps instead */
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -42,11 +43,14 @@
   line-height: 1.2;
 }
 
+/* The status message sits under the board, next to the buttons
+   (src/shared/status.js). */
 .game-status {
   min-height: 46px;
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  gap: 10px;
+  margin-top: 16px;
   padding: 11px 14px;
   border: 1px solid var(--border);
   border-radius: 9px;
@@ -56,16 +60,94 @@
 }
 
 .game-status[data-state="won"] {
-  border-color: #547d4d;
-  color: var(--success);
-  background: rgb(73 132 65 / 12%);
+  border: 2px solid #6fae66;
+  color: #c4f0bd;
+  background: rgb(73 132 65 / 26%);
+  font-size: 1.05rem;
+  font-weight: 700;
 }
 
-.game-status[data-state="lost"],
+/* Wrong answers need to be hard to miss. */
+.game-status[data-state="lost"] {
+  border: 2px solid #e0705f;
+  color: #ffd9d3;
+  background: rgb(170 52 40 / 32%);
+  font-size: 1.05rem;
+  font-weight: 700;
+  box-shadow: 0 0 0 4px rgb(224 112 95 / 14%);
+}
+
+.game-status[data-state="warning"] {
+  border: 2px solid #d7a84a;
+  color: #ffe7b0;
+  background: rgb(190 140 40 / 22%);
+  font-weight: 700;
+}
+
 .game-status[data-state="error"] {
   border-color: #874b45;
   color: var(--danger);
   background: rgb(155 51 41 / 12%);
+}
+
+/* A round badge in front of results: tick, cross or "!". */
+.game-status[data-state="won"]::before,
+.game-status[data-state="lost"]::before,
+.game-status[data-state="warning"]::before {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #171916;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.game-status[data-state="won"]::before {
+  content: "\2713";
+  background: #8fce8b;
+}
+
+.game-status[data-state="lost"]::before {
+  content: "\2715";
+  background: #ef8b80;
+}
+
+.game-status[data-state="warning"]::before {
+  content: "!";
+  background: #e9c16a;
+}
+
+.game-status.status-pop[data-state="lost"],
+.game-status.status-pop[data-state="warning"] {
+  animation: status-shake 420ms ease-in-out;
+}
+
+.game-status.status-pop[data-state="won"] {
+  animation: status-pop 360ms ease-out;
+}
+
+@keyframes status-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-7px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(2px); }
+}
+
+@keyframes status-pop {
+  0% { transform: scale(0.97); }
+  60% { transform: scale(1.015); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-status.status-pop {
+    animation: none !important;
+  }
 }
 
 .board-container {
@@ -135,7 +217,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-top: 20px;
+  margin-top: 14px;
 }
 
 .keyboard-help strong {
@@ -243,5 +325,151 @@
     flex-direction: column;
     gap: 12px;
     padding: 12px 14px;
+  }
+}
+
+/* ------------------------------------------------------------
+   Hints: the Hint button and the hint dialog
+   (built by src/shared/hints.js).
+   ------------------------------------------------------------ */
+
+#hint-button {
+  /* Keep the countdown digits from jiggling the button's width. */
+  font-variant-numeric: tabular-nums;
+}
+
+#hint-button:disabled {
+  cursor: not-allowed;
+}
+
+.hint-dialog {
+  width: min(100% - 32px, 540px);
+  max-height: min(100% - 32px, 640px);
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--text);
+  background: var(--panel);
+  box-shadow: 0 20px 60px rgb(0 0 0 / 45%);
+}
+
+/* Header and buttons stay put; only the hints scroll on small screens. */
+.hint-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.hint-dialog::backdrop {
+  background: rgb(0 0 0 / 62%);
+  backdrop-filter: blur(2px);
+}
+
+.hint-dialog-panel {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.hint-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px 0;
+}
+
+.hint-dialog-title {
+  margin: 0;
+  color: var(--accent);
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.hint-dialog-close {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--muted);
+  background: transparent;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.hint-dialog-close:hover {
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.hint-dialog-body {
+  position: relative; /* so hints.js can scroll to the major hint */
+  display: grid;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: 14px;
+  padding: 14px 20px 4px;
+  overflow-y: auto;
+  line-height: 1.55;
+}
+
+.hint-question {
+  margin: 0;
+  color: var(--text);
+}
+
+.hint-block {
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgb(0 0 0 / 14%);
+}
+
+.hint-block-major {
+  border-color: #6d5c38;
+  background: rgb(215 181 109 / 9%);
+}
+
+.hint-block-label {
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hint-block p {
+  margin: 0;
+  color: var(--text);
+}
+
+.hint-block p + p {
+  margin-top: 8px;
+}
+
+.hint-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 20px 20px;
+}
+
+@media (max-width: 640px) {
+  .hint-dialog-header {
+    padding: 14px 14px 0;
+  }
+
+  .hint-dialog-body {
+    padding: 12px 14px 4px;
+  }
+
+  .hint-dialog-actions {
+    flex-direction: column-reverse;
+    padding: 14px;
   }
 }

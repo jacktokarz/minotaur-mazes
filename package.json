@@ -4,11 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "puzzles": "node scripts/generate-map-index.mjs && node scripts/build-zoo-puzzles.mjs",
+    "puzzles": "node scripts/generate-map-index.mjs && node scripts/build-zoo-puzzles.mjs && node scripts/build-mirror-puzzles.mjs && node scripts/build-space-puzzles.mjs",
     "dev": "npm run puzzles && vite",
     "build": "npm run puzzles && vite build",
     "preview": "vite preview",
-    "zoo-test": "node scripts/zoo-test.mjs"
+    "zoo-test": "node scripts/zoo-test.mjs",
+    "mirror-test": "node scripts/mirror-test.mjs",
+    "space-test": "node scripts/space-test.mjs"
   },
   "devDependencies": {
     "vite": "^6.4.5"

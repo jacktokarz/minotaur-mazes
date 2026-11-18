@@ -64,14 +64,6 @@
           </ol>
         </section>
 
-        <div
-          id="game-status"
-          class="game-status"
-          role="status"
-          aria-live="polite"
-        >
-          Loading the game…
-        </div>
 
         <div class="board-container">
           <div id="board-stage" class="board-stage">
@@ -93,6 +85,16 @@
           </div>
         </div>
 
+        <!-- Status and results, right above the buttons (src/shared/status.js). -->
+        <div
+          id="game-status"
+          class="game-status"
+          role="status"
+          aria-live="polite"
+        >
+          Loading the game…
+        </div>
+
         <div class="game-controls">
           <div class="keyboard-help">
             <strong>Move Theseus</strong>
@@ -102,6 +104,8 @@
           <div class="game-buttons">
             <button id="undo-button" type="button">Undo Last Move</button>
             <button id="restart-button" type="button">Restart Maze</button>
+            <!-- Set up by src/shared/hints.js; shown once the maze has hints. -->
+            <button id="hint-button" type="button" hidden>Hint</button>
           </div>
         </div>
 

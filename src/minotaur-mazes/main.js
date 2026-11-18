@@ -2,6 +2,8 @@ import maps from "./maps-index.json";
 import { loadMapText } from "./mapParser.js";
 import { MAP_INFO } from "./map-info.js";
 import { renderSourceBanner } from "../shared/sourceBanner.js";
+import { createHints } from "../shared/hints.js";
+import { createStatus } from "../shared/status.js";
 import "../shared/base.css";
 import "../shared/game.css";
 import "./style.css";
@@ -23,6 +25,8 @@ const restartButton = document.querySelector("#restart-button");
 
 const undoButton = document.querySelector("#undo-button");
 const moveHistory = [];
+
+const hints = createHints(document.querySelector("#hint-button"));
 
 // ------------------------------------------------------------
 // Game settings
@@ -154,10 +158,7 @@ function isMinotaurAt(position) {
   );
 }
 
-function setStatus(message, type = "") {
-  gameStatus.textContent = message;
-  gameStatus.dataset.state = type;
-}
+const setStatus = createStatus(gameStatus);
 
 function updateAddress(mapName, replace = false) {
   const encodedName = encodeURIComponent(mapName);
@@ -249,6 +250,7 @@ async function selectMap(mapName, options = {}) {
 
     gameTitle.textContent = definition.title;
     showMapSource(definition.name);
+    hints.load(findMapInfo(definition.name)?.hints ?? null);
 
     resetGame();
 

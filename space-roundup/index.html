@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <meta
+      name="description"
+      content="Space Roundup: fly through the asteroids, round up your friends, and find the way out."
+    />
+
+    <title>Space Roundup</title>
+  </head>
+
+  <body>
+    <main class="app">
+      <nav class="site-nav" aria-label="Site">
+        <a href="/">&larr; All puzzles</a>
+      </nav>
+
+      <header class="site-header">
+        <a class="site-title" href="/space-roundup/" aria-label="Space Roundup home">
+          Space Roundup
+        </a>
+
+        <p class="site-subtitle">
+          Round up your friends and fly home.
+        </p>
+      </header>
+
+      <!-- Shown for puzzles whose file has a "post:" link in [info]. -->
+      <aside id="source-banner" class="source-banner" hidden>
+        <p id="source-banner-text"></p>
+        <a id="source-banner-link" class="button button-primary" href="https://propuzz.substack.com/">
+          Read the post on Substack
+        </a>
+      </aside>
+
+      <section class="game-panel" aria-labelledby="game-title">
+        <div class="game-toolbar">
+          <div>
+            <h1 id="game-title">Loading…</h1>
+          </div>
+        </div>
+
+        <section class="instructions" aria-labelledby="instructions-title">
+          <h2 id="instructions-title">How to play</h2>
+
+          <ol>
+            <li>
+              You're a round little space creature, and your friends are
+              scattered around the asteroid field.
+            </li>
+            <li>
+              Pick a direction and you'll fly as far as you can, until you hit
+              an asteroid or a friend.
+            </li>
+            <li>
+              Fly into a friend to pick them up. You stop right in front of
+              them, and they come along with you.
+            </li>
+            <li>
+              The exit stays locked (and stops you like an asteroid) until
+              you've found every friend. Then fly into it to escape!
+            </li>
+            <li>
+              You can move as many times as you like, and reset whenever you
+              get stuck.
+            </li>
+          </ol>
+        </section>
+
+        <div class="board-container sr-board-container">
+          <!-- Filled in by src/space-roundup/main.js -->
+          <div id="space-board" class="sr-board-wrap" role="group" aria-label="Asteroid field">
+            <div class="sr-board"></div>
+            <div class="sr-sprites"></div>
+          </div>
+
+          <div class="sr-friends" aria-live="polite">
+            Friends found: <span id="friend-icons" class="sr-friend-icons"></span>
+            <strong id="friend-count">0 / 0</strong>
+          </div>
+        </div>
+
+        <!-- Status and results, right above the buttons (src/shared/status.js). -->
+        <div
+          id="game-status"
+          class="game-status"
+          role="status"
+          aria-live="polite"
+        >
+          Loading the maze…
+        </div>
+
+        <div class="game-controls">
+          <div class="keyboard-help">
+            <strong>Fly</strong>
+            <p>Use the arrow keys or WASD, the arrow buttons, or swipe on the maze.</p>
+          </div>
+
+          <div class="game-buttons">
+            <button id="reset-button" type="button">Reset Maze</button>
+            <!-- Set up by src/shared/hints.js; shown once the puzzle has hints. -->
+            <button id="hint-button" type="button" hidden>Hint</button>
+          </div>
+        </div>
+
+        <div class="touch-controls sr-touch-controls" aria-label="Flying controls">
+          <button type="button" data-move="up" aria-label="Fly up">▲</button>
+          <div class="touch-controls-middle">
+            <button type="button" data-move="left" aria-label="Fly left">◀</button>
+            <button type="button" data-move="down" aria-label="Fly down">▼</button>
+            <button type="button" data-move="right" aria-label="Fly right">▶</button>
+          </div>
+        </div>
+      </section>
+
+      <div>
+        <br />
+        <strong>Credits</strong>
+        <p>This website and these puzzles created by: <a href="https://propuzz.substack.com">Jack Tokarz</a></p>
+      </div>
+    </main>
+
+    <script type="module" src="/src/space-roundup/main.js"></script>
+  </body>
+</html>

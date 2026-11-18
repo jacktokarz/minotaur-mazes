@@ -47,6 +47,10 @@ C: water
 A: 1, 2
 B: 3, 4
 C:
+
+[hints]
+minor: Think about who wants to be near whom.
+major: Put the Lion and the Tiger together in the Grass.
 ```
 
 ### Settings (top of the file, all optional)
@@ -140,6 +144,28 @@ The build can't read clues written in plain English, so it can't tell whether
 your clues really lead to only this arrangement. That depends on writing the
 clues carefully (the `Test` puzzle was checked by trying every possible
 arrangement against its clues).
+
+### `[hints]`
+
+Optional hints for the puzzle's Hint button. The button unlocks after the
+puzzle has been on screen for 30 seconds and offers the minor hint. Once the
+player has seen it, the button stays available: it shows the minor hint again
+and offers the major hint.
+
+```
+[hints]
+minor: A general idea of the strategy, without naming specific animals' homes.
+major: A specific step or two, e.g. "Put the Lion in the Grass."
+major: Add another "major:" (or "minor:") line for a second paragraph.
+```
+
+- If you add `[hints]`, it needs one `minor:` and one `major:` line. Repeat
+  either one to add more paragraphs to that hint.
+- Each hint is one line of plain text, however long.
+- `[hints]` is optional. A puzzle without it has no Hint button, and the build
+  prints a reminder.
+- Hints are published with the puzzle (unlike the `[solution]`), so anyone
+  digging through the page's files can read them early.
 
 ## Testing a puzzle
 

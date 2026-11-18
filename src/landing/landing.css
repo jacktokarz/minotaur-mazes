@@ -91,6 +91,9 @@
 
 .puzzle-card-inner {
   display: grid;
+  /* Image keeps its shape; the text area takes any extra height, so every
+     card's image is the same size. */
+  grid-template-rows: auto 1fr;
   height: 100%;
 }
 
@@ -192,6 +195,7 @@
 @container (min-width: 640px) {
   .puzzle-card-inner {
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    grid-template-rows: none;
   }
 
   .puzzle-card-media {

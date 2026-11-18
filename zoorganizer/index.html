@@ -86,14 +86,6 @@
           <ul id="puzzle-clues" class="zoo-clue-list"></ul>
         </section>
 
-        <div
-          id="game-status"
-          class="game-status"
-          role="status"
-          aria-live="polite"
-        >
-          Loading the zoo…
-        </div>
 
         <div class="board-container">
           <div id="board-stage" class="board-stage">
@@ -114,6 +106,16 @@
           </div>
         </div>
 
+        <!-- Status and results, right above the buttons (src/shared/status.js). -->
+        <div
+          id="game-status"
+          class="game-status"
+          role="status"
+          aria-live="polite"
+        >
+          Loading the zoo…
+        </div>
+
         <div class="game-controls">
           <div class="keyboard-help">
             <strong>Place the animals</strong>
@@ -123,6 +125,8 @@
           <div class="game-buttons">
             <button id="submit-button" type="button" disabled>Submit</button>
             <button id="reset-button" type="button">Reset Board</button>
+            <!-- Set up by src/shared/hints.js; shown once the puzzle has hints. -->
+            <button id="hint-button" type="button" hidden>Hint</button>
           </div>
         </div>
       </section>

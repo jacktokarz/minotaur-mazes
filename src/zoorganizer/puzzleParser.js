@@ -6,6 +6,8 @@
  * page for players. See puzzles/zoorganizer/README.md for the file format.
  */
 
+import { parseHintSection } from "../shared/hintSection.js";
+
 /**
  * Ground types an enclosure can have, and the word shown on its sign.
  * Each has a tile in public/zoorganizer/tiles/terrain-<type>.png.
@@ -39,6 +41,7 @@ const KNOWN_SECTIONS = new Set([
   "layout",
   "animals",
   "solution",
+  "hints",
 ]);
 
 export class PuzzleError extends Error {
@@ -472,6 +475,9 @@ export function parsePuzzle(text, name) {
   // check. They are interpreted by scripts/zoo/rules.mjs, not published.
   const rulesSection = onlySection(sections, "rules", false);
 
+  // [hints] (optional): shown by the Hint button. Without it, there's no button.
+  const hintsSection = onlySection(sections, "hints", false);
+
   return {
     name,
     title: settings.title ?? name,
@@ -485,5 +491,10 @@ export function parsePuzzle(text, name) {
     solution,
     solutionById,
     rules: rulesSection ? nonBlank(rulesSection.lines) : null,
+    hints: hintsSection
+      ? parseHintSection(hintsSection.lines, hintsSection.line, (message, line) => {
+          throw new PuzzleError(message, line);
+        })
+      : null,
   };
 }
